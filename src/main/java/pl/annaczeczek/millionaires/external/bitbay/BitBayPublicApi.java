@@ -2,7 +2,8 @@ package pl.annaczeczek.millionaires.external.bitbay;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import pl.annaczeczek.millionaires.external.bitbay.dto.CurrencyInfoDto;
+import pl.annaczeczek.millionaires.external.bitbay.dto.AdvancedCurrencyInfoDto;
+import pl.annaczeczek.millionaires.external.bitbay.dto.BaseCurrencyInfo;
 
 @Component
 public class BitBayPublicApi {
@@ -14,10 +15,16 @@ public class BitBayPublicApi {
         restTemplate = new RestTemplate();
     }
 
-    public CurrencyInfoDto getMarketInfoForCurrency(BitBayCurrency bitBayCurrency) {
-        CurrencyInfoDto currencyInfoDto = restTemplate.getForEntity(BASE_URL + bitBayCurrency + "/all.json", CurrencyInfoDto.class).getBody();
-        currencyInfoDto.setCurrency(bitBayCurrency);
-        return currencyInfoDto;
+    public BaseCurrencyInfo getCurrencyInfoForCurrency(BitBayCurrency bitBayCurrency) {
+        BaseCurrencyInfo baseCurrencyInfo = restTemplate.getForEntity(BASE_URL + bitBayCurrency + "/all.json", BaseCurrencyInfo.class).getBody();
+        baseCurrencyInfo.currency = bitBayCurrency;
+        return baseCurrencyInfo;
+    }
+
+    public AdvancedCurrencyInfoDto getAdvancedCurrencyInfoForCurrency(BitBayCurrency bitBayCurrency) {
+        AdvancedCurrencyInfoDto advancedCurrencyInfoDto = restTemplate.getForEntity(BASE_URL + bitBayCurrency + "/all.json", AdvancedCurrencyInfoDto.class).getBody();
+        advancedCurrencyInfoDto.currency = bitBayCurrency;
+        return advancedCurrencyInfoDto;
     }
 
 }
