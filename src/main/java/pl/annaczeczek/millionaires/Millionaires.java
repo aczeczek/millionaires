@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-public class BitBayBot {
+public class Millionaires {
 
     public static void main(String[] args) {
-        SpringApplication.run(BitBayBot.class, args);
+        SpringApplication.run(Millionaires.class, args);
     }
 }
