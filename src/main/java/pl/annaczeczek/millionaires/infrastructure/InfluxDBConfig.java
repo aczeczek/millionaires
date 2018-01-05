@@ -16,21 +16,24 @@ public class InfluxDBConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(InfluxDBConfig.class);
 
+
     @Value("${influx.url}")
     private String url;
     @Value("${influx.username}")
     private String username;
     @Value("${influx.password}")
     private String password;
+    @Value("${influx.dbName}")
+    private String dbName;
 
     @Bean
     public InfluxDB influxDB() {
-
         InfluxDB influxDB = InfluxDBFactory.connect(url, username, password);
         Pong ping = influxDB.ping();
-//        influxDB.deleteDatabase("millionaires");
-        influxDB.createDatabase("millionaires");
-        influxDB.setDatabase("millionaires");
+        if (!influxDB.databaseExists(dbName)) {
+            influxDB.createDatabase(dbName);
+        }
+        influxDB.setDatabase(dbName);
         logger.info("Influx connection: " + ping);
         influxDB.enableBatch(100, 1000, TimeUnit.MILLISECONDS);
         return influxDB;
