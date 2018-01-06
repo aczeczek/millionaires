@@ -15,17 +15,17 @@ public class UsdToPlnRateService {
 
     private static AtomicReference<Double> rate = new AtomicReference<>(0.0);
 
-    @Scheduled(fixedRate = 60000L)
-    private void get() {
+    @Scheduled(cron = "0 0 * * * *") //every hour
+    private double get() {
         double r = fixerPublicApi.getUsdToPlnRate();
-        System.out.println(r);
         rate.set(r);
+        return r;
     }
 
     public double getRate() {
         double r = rate.get();
         if (r == 0.0) {
-            get();
+            return get();
         }
         return r;
     }

@@ -39,7 +39,7 @@ public class ExchangesCollector {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
-    @Scheduled(fixedRate = 60000L)
+    @Scheduled(cron = "0 * * * * *") //every minute
     public void get() {
         List<ExchangeRate> exchangeRates = new ArrayList<>(20);
         exchangeRates.addAll(getForBitcoin());
@@ -48,35 +48,37 @@ public class ExchangesCollector {
     }
 
     private List<ExchangeRate> getForBitcoin() {
+        double usdPlnRate = usdToPlnRateService.getRate();
         List<ExchangeRate> exchangeRates = new ArrayList<>();
         BaseCurrencyInfo bb = bitBayPublicApi.getCurrencyInfoForCurrency(BitBayCurrency.BTCPLN);
         exchangeRates.add(new ExchangeRate("BitBay", "BTC", "PLN", bb.last));
-        exchangeRates.add(new ExchangeRate("BitBay", "BTC", "USD", bb.last / usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("BitBay", "BTC", "USD", bb.last / usdPlnRate));
         CurrencyInfoDto bm = bitMarketPublicApi.getCurrencyInfoDto(BitMarketCurrency.BTCPLN);
         exchangeRates.add(new ExchangeRate("BitMarket", "BTC", "PLN", bm.last));
-        exchangeRates.add(new ExchangeRate("BitMarket", "BTC", "USD", bm.last / usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("BitMarket", "BTC", "USD", bm.last / usdPlnRate));
         Summary gdax = cryptoWatchPublicApi.getMarketSummary("gdax", "btcusd");
-        exchangeRates.add(new ExchangeRate("GDAX", "BTC", "PLN", gdax.result.price.last * usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("GDAX", "BTC", "PLN", gdax.result.price.last * usdPlnRate));
         exchangeRates.add(new ExchangeRate("GDAX", "BTC", "USD", gdax.result.price.last));
         Summary bitfinex = cryptoWatchPublicApi.getMarketSummary("bitfinex", "btcusd");
-        exchangeRates.add(new ExchangeRate("BitFinex", "BTC", "PLN", bitfinex.result.price.last * usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("BitFinex", "BTC", "PLN", bitfinex.result.price.last * usdPlnRate));
         exchangeRates.add(new ExchangeRate("BitFinex", "BTC", "USD", bitfinex.result.price.last));
         return exchangeRates;
     }
 
     private List<ExchangeRate> getForLitecoin() {
+        double usdPlnRate = usdToPlnRateService.getRate();
         List<ExchangeRate> exchangeRates = new ArrayList<>();
         BaseCurrencyInfo bb = bitBayPublicApi.getCurrencyInfoForCurrency(BitBayCurrency.LTCPLN);
         exchangeRates.add(new ExchangeRate("BitBay", "LTC", "PLN", bb.last));
-        exchangeRates.add(new ExchangeRate("BitBay", "LTC", "USD", bb.last / usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("BitBay", "LTC", "USD", bb.last / usdPlnRate));
         CurrencyInfoDto bm = bitMarketPublicApi.getCurrencyInfoDto(BitMarketCurrency.LTCPLN);
         exchangeRates.add(new ExchangeRate("BitMarket", "LTC", "PLN", bm.last));
-        exchangeRates.add(new ExchangeRate("BitMarket", "LTC", "USD", bm.last / usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("BitMarket", "LTC", "USD", bm.last / usdPlnRate));
         Summary gdax = cryptoWatchPublicApi.getMarketSummary("gdax", "ltcusd");
-        exchangeRates.add(new ExchangeRate("GDAX", "LTC", "PLN", gdax.result.price.last * usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("GDAX", "LTC", "PLN", gdax.result.price.last * usdPlnRate));
         exchangeRates.add(new ExchangeRate("GDAX", "LTC", "USD", gdax.result.price.last));
         Summary bitfinex = cryptoWatchPublicApi.getMarketSummary("bitfinex", "ltcusd");
-        exchangeRates.add(new ExchangeRate("BitFinex", "LTC", "PLN", bitfinex.result.price.last * usdToPlnRateService.getRate()));
+        exchangeRates.add(new ExchangeRate("BitFinex", "LTC", "PLN", bitfinex.result.price.last * usdPlnRate));
         exchangeRates.add(new ExchangeRate("BitFinex", "LTC", "USD", bitfinex.result.price.last));
         return exchangeRates;
     }

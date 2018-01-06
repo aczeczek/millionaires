@@ -10,7 +10,7 @@ import java.util.List;
 // min jest kursem transakcji, która miała najmniejszą wartość
 // bid jest najkorzystniejszym kursem aktualnych ofert kupna
 // ask jest najkorzystniejszym kursem aktualnych ofert sprzedaży
-// vwap jestśrednią ważoną z ostatnich 24 godzin
+// vwap jest średnią ważoną z ostatnich 24 godzin
 // average jest średnią ceną liczoną z 3 najlepszych ofert sprzedaży
 public class AdvancedCurrencyInfoDto extends BaseCurrencyInfo {
 
