@@ -1,9 +1,10 @@
 package pl.annaczeczek.millionaires.external.bitmarket;
 
-public enum  BitMarketCurrency {
+public enum BitMarketCurrency {
 
     BTCPLN("Bitcoin"),
-    LTCPLN("Litecoin");
+    LTCPLN("Litecoin"),
+    BCCPLN("Bitcoin Cash");
 
     public final String name;
 

@@ -39,10 +39,11 @@ public class ExchangesCollector {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
-    @Scheduled(cron = "0 * * * * *") //every minute
+    @Scheduled(cron = "0 0/5 * * * *") //every 5 minutes
     public void get() {
         List<ExchangeRate> exchangeRates = new ArrayList<>(20);
         exchangeRates.addAll(getForBitcoin());
+        exchangeRates.addAll(getForBitcoinCash());
         exchangeRates.addAll(getForLitecoin());
         exchangeRates.forEach(exchangeRateService::save);
     }
@@ -80,6 +81,24 @@ public class ExchangesCollector {
         Summary bitfinex = cryptoWatchPublicApi.getMarketSummary("bitfinex", "ltcusd");
         exchangeRates.add(new ExchangeRate("BitFinex", "LTC", "PLN", bitfinex.result.price.last * usdPlnRate));
         exchangeRates.add(new ExchangeRate("BitFinex", "LTC", "USD", bitfinex.result.price.last));
+        return exchangeRates;
+    }
+
+    private List<ExchangeRate> getForBitcoinCash() {
+        double usdPlnRate = usdToPlnRateService.getRate();
+        List<ExchangeRate> exchangeRates = new ArrayList<>();
+        BaseCurrencyInfo bb = bitBayPublicApi.getCurrencyInfoForCurrency(BitBayCurrency.BCCPLN);
+        exchangeRates.add(new ExchangeRate("BitBay", "BCC", "PLN", bb.last));
+        exchangeRates.add(new ExchangeRate("BitBay", "BCC", "USD", bb.last / usdPlnRate));
+        CurrencyInfoDto bm = bitMarketPublicApi.getCurrencyInfoDto(BitMarketCurrency.BCCPLN);
+        exchangeRates.add(new ExchangeRate("BitMarket", "BCC", "PLN", bm.last));
+        exchangeRates.add(new ExchangeRate("BitMarket", "BCC", "USD", bm.last / usdPlnRate));
+        Summary gdax = cryptoWatchPublicApi.getMarketSummary("gdax", "bchusd");
+        exchangeRates.add(new ExchangeRate("GDAX", "BCC", "PLN", gdax.result.price.last * usdPlnRate));
+        exchangeRates.add(new ExchangeRate("GDAX", "BCC", "USD", gdax.result.price.last));
+        Summary bitfinex = cryptoWatchPublicApi.getMarketSummary("bitfinex", "bchusd");
+        exchangeRates.add(new ExchangeRate("BitFinex", "BCC", "PLN", bitfinex.result.price.last * usdPlnRate));
+        exchangeRates.add(new ExchangeRate("BitFinex", "BCC", "USD", bitfinex.result.price.last));
         return exchangeRates;
     }
 }
