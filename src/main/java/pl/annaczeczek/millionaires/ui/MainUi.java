@@ -19,7 +19,8 @@ import java.util.List;
 @Theme("valo")
 public class MainUi extends UI {
 
-    private static final String URL = "http://aniacz.pl:3000/dashboard-solo/db/millionaires?refresh=1m&panelId=6&orgId=1&tab=general&theme=light&from=%s&to=now&var-currency=%s&var-cryptoCurrency=%s";
+    private static final String URL = "http://aniacz.pl:3000/dashboard-solo/db/millionaires?refresh=" +
+            "1m&panelId=6&orgId=1&tab=general&theme=light&from=%s&to=now&var-currency=%s&var-cryptoCurrency=%s";
     private BrowserFrame currencyGraph = new BrowserFrame("",
             new ExternalResource(String.format(URL, "now-1h", "USD", "BTC")));
 
