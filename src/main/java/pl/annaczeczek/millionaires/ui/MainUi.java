@@ -26,7 +26,7 @@ public class MainUi extends UI {
 
     private List<String> currencies = Arrays.asList("PLN", "USD");
     private List<String> cryptoCurrencies = Arrays.asList("BTC", "BCC", "LTC");
-    private List<String> timeRange = Arrays.asList("now-1h", "now-6h", "now-24h", "now-2d", "now-7h");
+    private List<String> timeRange = Arrays.asList("now-1h", "now-6h", "now-24h", "now-2d", "now-7d", "now-30d");
 
     private String selectedCurrency = currencies.get(0);
     private String selectedCryptoCurrency = cryptoCurrencies.get(0);
